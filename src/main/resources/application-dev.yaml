@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+server:
+  port: 10210
+
+api:
+  base-url: https://dev.api.example.com

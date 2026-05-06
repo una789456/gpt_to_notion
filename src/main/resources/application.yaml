@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: gptToNotion
+server:
+  port: 10210
+
+notion:
+  base-url: https://api.notion.com/v1
+  version: "2022-06-28"
+  token: ${NOTION_TOKEN:}
+  databases:
+    # - id: YOUR_DB_ID
+    #   label: Friendly Name

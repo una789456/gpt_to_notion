@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+server:
+  port: 10210
+
+api:
+  base-url: http://localhost:10210
