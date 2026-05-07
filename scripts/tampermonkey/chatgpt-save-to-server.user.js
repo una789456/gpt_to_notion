@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         ChatGPT -> Save to My Server Button
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  ChatGPT 화면 "Save (Notion)" 버튼 추가 및 최근 Q/A 서버 전송 스크립트
 // @match        https://chatgpt.com/*
 // @match        https://chat.openai.com/*
+// @run-at       document-idle
+// @noframes
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
+// @sandbox      DOM
 // ==/UserScript==
 
 (() => {
@@ -479,7 +482,7 @@
    * ]
    */
   function extractMessages() {
-    const articles = Array.from(document.querySelectorAll('article')); // 현재 스레드의 메시지 컨테이너들
+    const articles = Array.from(document.querySelectorAll('section')); // 현재 스레드의 메시지 컨테이너들
     const msgs = []; // { role, text } 배열
     for (const a of articles) {
       const text = extractArticleText(a);
@@ -1109,6 +1112,8 @@
    * - SPA 리렌더 환경 중복 생성 방지 기능
    */
   function ensureUI() {
+    if (!document.body) return;
+
     // 이미 UI가 있으면 중복 생성하지 않음(SPA 리렌더 대응)
     if (getUiEl(UI_IDS.saveBtn)) return;
 
@@ -1165,6 +1170,11 @@
    * @returns {void}
    */
   function start() {
+    if (!document.body) {
+      window.addEventListener('DOMContentLoaded', start, { once: true });
+      return;
+    }
+
     ensureUI();
 
     // DOM 변화 감시: 버튼/패널이 사라지는 경우 재삽입
